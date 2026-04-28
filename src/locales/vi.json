@@ -1,0 +1,38 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Có lỗi xảy ra",
+    "retry": "Thử lại",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "search": "Tìm kiếm...",
+    "all": "Tất cả",
+    "actions": "Thao tác",
+    "details": "Chi tiết"
+  },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "stations": "Trạm sạc",
+    "chargers": "Bộ sạc",
+    "analytics": "Phân tích",
+    "users": "Người dùng",
+    "alerts": "Cảnh báo",
+    "auditLog": "Nhật ký",
+    "settings": "Cài đặt"
+  },
+  "dashboard": {
+    "kpi": {
+      "revenueToday": "Doanh thu hôm nay",
+      "activeSessions": "Phiên sạc đang hoạt động",
+      "slots": "Slots trống / Đã dùng",
+      "health": "Sức khỏe hệ thống"
+    },
+    "charts": {
+      "sessionByHour": "Phiên sạc theo giờ",
+      "chargerStatus": "Trạng thái bộ sạc"
+    },
+    "map": "Bản đồ trạm sạc",
+    "alerts": "Cảnh báo mới nhất"
+  }
+}

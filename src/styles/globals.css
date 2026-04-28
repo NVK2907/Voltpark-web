@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base Neutral Colors */
+    --neutral-50: 210 40% 98%; /* F8FAFC */
+    --neutral-700: 215 25% 27%; /* 334155 */
+    --neutral-800: 222 33% 17%; /* 1E293B */
+    --neutral-900: 222 47% 11%; /* 0F172A */
+
+    /* Semantic Colors */
+    --primary: 199 89% 48%; /* 0EA5E9 */
+    --primary-foreground: 0 0% 100%;
+
+    --success: 160 84% 39%; /* 10B981 */
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%; /* F59E0B */
+    --warning-foreground: 0 0% 100%;
+
+    --danger: 0 84% 60%; /* EF4444 */
+    --danger-foreground: 0 0% 100%;
+
+    /* Shadcn defaults */
+    --background: var(--neutral-50);
+    --foreground: var(--neutral-900);
+
+    --card: 0 0% 100%;
+    --card-foreground: var(--neutral-900);
+
+    --popover: 0 0% 100%;
+    --popover-foreground: var(--neutral-900);
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: var(--neutral-900);
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 210 40% 96%;
+    --accent-foreground: var(--neutral-900);
+
+    --destructive: var(--danger);
+    --destructive-foreground: var(--danger-foreground);
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: var(--primary);
+
+    --sidebar: var(--neutral-900);
+    --sidebar-foreground: 213 31% 91%;
+    --sidebar-border: 223 47% 17%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: var(--neutral-900);
+    --foreground: 213 31% 91%;
+
+    --card: var(--neutral-800);
+    --card-foreground: 213 31% 91%;
+
+    --popover: var(--neutral-800);
+    --popover-foreground: 213 31% 91%;
+
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: var(--neutral-700);
+    --secondary-foreground: 213 31% 91%;
+
+    --muted: var(--neutral-800);
+    --muted-foreground: 215 16% 57%;
+
+    --accent: var(--neutral-700);
+    --accent-foreground: 213 31% 91%;
+
+    --destructive: var(--danger);
+    --destructive-foreground: var(--danger-foreground);
+
+    --border: var(--neutral-700);
+    --input: var(--neutral-700);
+    --ring: var(--primary);
+
+    --sidebar: 222 47% 5%;
+    --sidebar-foreground: 213 31% 85%;
+    --sidebar-border: var(--neutral-800);
+  }
+
+  /* Owner Theme (Emerald) */
+  .theme-owner {
+    --primary: 160 84% 39%; /* 10B981 Emerald 500 */
+    --ring: var(--primary);
+  }
+
+  .dark .theme-owner {
+    --primary: 158 64% 52%; /* 34D399 Emerald 400 for better visibility in dark mode */
+    --ring: var(--primary);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  /* Focus ring */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    @apply h-2 w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /* Skeleton loading */
+  .skeleton {
+    @apply animate-pulse rounded-md bg-muted;
+  }
+
+  /* Shimmer effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 25%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 75%
+    );
+    background-size: 400px 100%;
+    @apply animate-shimmer;
+  }
+}

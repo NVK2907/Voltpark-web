@@ -1,0 +1,14 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "usernamehw.errorlens",
+    "ms-vscode.vscode-typescript-next",
+    "mikestead.dotenv",
+    "github.vscode-pull-request-github",
+    "eamodio.gitlens",
+    "christian-kohler.path-intellisense",
+    "vitest.explorer"
+  ]
+}
