@@ -1,13 +1,16 @@
 import { Menu, Bell, Plus, Sun, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import { GlobalSearch } from './GlobalSearch';
 import { ShiftStatusPill } from './ShiftStatusPill';
 
+import { STAFF_ROUTES } from '@/lib/constants';
 import { MOCK_STAFF_CONTEXT } from '@/lib/mock-staff';
 import { useStaffActionQueue } from '@/lib/staff-action-queue';
 import { Button } from '@/shared/components/ui/button';
 
 export function StaffHeader({ onMenuClick }: { onMenuClick: () => void }) {
+  const navigate = useNavigate();
   const { queue, isOnline } = useStaffActionQueue();
   const pendingCount = queue.filter((a) => a.status === 'pending' || a.status === 'failed').length;
 
@@ -46,6 +49,7 @@ export function StaffHeader({ onMenuClick }: { onMenuClick: () => void }) {
             variant="default"
             size="sm"
             className="hidden h-8 gap-1 bg-violet-600 hover:bg-violet-700 sm:flex"
+            onClick={() => navigate(STAFF_ROUTES.SESSIONS_NEW)}
           >
             <Plus className="h-4 w-4" /> Phiên sạc mới
           </Button>

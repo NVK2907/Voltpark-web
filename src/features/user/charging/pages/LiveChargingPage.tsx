@@ -1,11 +1,14 @@
 import { Zap, Battery, ArrowLeft, Settings, Info, Thermometer, Activity } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { cn } from '@/lib/utils';
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 
 export default function LiveChargingPage() {
+  const [stopping, setStopping] = useState(false);
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
       {/* Dark Header */}
@@ -153,8 +156,18 @@ export default function LiveChargingPage() {
               </div>
 
               <div className="space-y-3 pt-4">
-                <Button className="h-16 w-full rounded-2xl bg-red-500 text-lg font-black tracking-tight text-white shadow-xl shadow-red-500/20 hover:bg-red-600">
-                  DỪNG SẠC NGAY
+                <Button
+                  className="h-16 w-full rounded-2xl bg-red-500 text-lg font-black tracking-tight text-white shadow-xl shadow-red-500/20 hover:bg-red-600"
+                  disabled={stopping}
+                  onClick={() => {
+                    setStopping(true);
+                    setTimeout(() => {
+                      toast.success('Đã dừng sạc. Hóa đơn đang được xử lý...');
+                      setStopping(false);
+                    }, 1200);
+                  }}
+                >
+                  {stopping ? 'Đang dừng...' : 'DỪNG SẠC NGAY'}
                 </Button>
                 <p className="text-center text-[10px] font-bold uppercase leading-relaxed text-slate-400">
                   Nhấn giữ để xác nhận dừng phiên sạc. Hóa đơn sẽ được gửi sau 1-2 phút.

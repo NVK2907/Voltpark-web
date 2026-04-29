@@ -18,22 +18,25 @@ import {
   SelectValue,
 } from '@/shared/components/ui/select';
 import type { Station, ColumnDef } from '@/types';
+import { AddStationSheet } from '../components/AddStationSheet';
 
 export function StationsListPage() {
   const navigate = useNavigate();
+  const [stations, setStations] = React.useState<Station[]>(MOCK_STATIONS);
   const [search, setSearch] = React.useState('');
   const [statusFilter, setStatusFilter] = React.useState('all');
   const [viewMode, setViewMode] = React.useState<'table' | 'grid'>('table');
+  const [addOpen, setAddOpen] = React.useState(false);
 
   const filteredStations = React.useMemo(() => {
-    return MOCK_STATIONS.filter((s) => {
+    return stations.filter((s) => {
       const matchSearch =
         s.name.toLowerCase().includes(search.toLowerCase()) ||
         s.address.toLowerCase().includes(search.toLowerCase());
       const matchStatus = statusFilter === 'all' || s.status === statusFilter;
       return matchSearch && matchStatus;
     });
-  }, [search, statusFilter]);
+  }, [stations, search, statusFilter]);
 
   const columns: ColumnDef<Station>[] = [
     {
@@ -100,7 +103,7 @@ export function StationsListPage() {
       <PageHeader
         title="Quản lý Trạm Sạc"
         actions={
-          <Button>
+          <Button onClick={() => setAddOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Thêm trạm mới
           </Button>
         }
@@ -199,6 +202,12 @@ export function StationsListPage() {
           )}
         </div>
       )}
+
+      <AddStationSheet
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        onAdd={(newStation) => setStations((prev) => [newStation, ...prev])}
+      />
     </div>
   );
 }

@@ -179,14 +179,22 @@ export function MarketingLayout() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/features" className="transition-colors hover:text-violet-400">
+                  <a
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                    className="transition-colors hover:text-violet-400"
+                  >
                     Tính năng nổi bật
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link to="/app" className="transition-colors hover:text-violet-400">
+                  <a
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                    className="transition-colors hover:text-violet-400"
+                  >
                     Tải ứng dụng
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -195,7 +203,7 @@ export function MarketingLayout() {
               <h4 className="mb-6 font-semibold text-white">Hỗ trợ</h4>
               <ul className="space-y-4 text-sm">
                 <li>
-                  <Link to="/support" className="transition-colors hover:text-violet-400">
+                  <Link to="/contact" className="transition-colors hover:text-violet-400">
                     Trung tâm trợ giúp
                   </Link>
                 </li>
@@ -210,9 +218,13 @@ export function MarketingLayout() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/report" className="transition-colors hover:text-violet-400">
+                  <a
+                    href="#"
+                    onClick={(e) => e.preventDefault()}
+                    className="transition-colors hover:text-violet-400"
+                  >
                     Báo cáo sự cố
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>

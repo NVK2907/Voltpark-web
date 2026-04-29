@@ -1,4 +1,8 @@
 import { Search, Bell, Menu, User, LogOut, Settings, CreditCard, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+
+import { useAuthStore } from '@/features/auth';
 
 import { Button } from '@/shared/components/ui/button';
 import {
@@ -16,6 +20,8 @@ interface UserHeaderProps {
 }
 
 export function UserHeader({ onMenuClick }: UserHeaderProps) {
+  const navigate = useNavigate();
+  const logout = useAuthStore((s) => s.logout);
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white/80 px-4 backdrop-blur-md dark:border-slate-800 dark:bg-slate-950/80 md:px-8">
       <div className="flex flex-1 items-center gap-4">
@@ -77,20 +83,36 @@ export function UserHeader({ onMenuClick }: UserHeaderProps) {
               Tài khoản của tôi
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer gap-3 rounded-xl px-3 py-2.5">
+            <DropdownMenuItem
+              className="cursor-pointer gap-3 rounded-xl px-3 py-2.5"
+              onClick={() => navigate('/profile')}
+            >
               <User className="h-4 w-4 text-violet-600" />
               <span className="font-semibold">Hồ sơ cá nhân</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer gap-3 rounded-xl px-3 py-2.5">
+            <DropdownMenuItem
+              className="cursor-pointer gap-3 rounded-xl px-3 py-2.5"
+              onClick={() => navigate('/wallet')}
+            >
               <CreditCard className="h-4 w-4 text-violet-600" />
               <span className="font-semibold">Ví & Thanh toán</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer gap-3 rounded-xl px-3 py-2.5">
+            <DropdownMenuItem
+              className="cursor-pointer gap-3 rounded-xl px-3 py-2.5"
+              onClick={() => navigate('/settings')}
+            >
               <Settings className="h-4 w-4 text-violet-600" />
               <span className="font-semibold">Cài đặt</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer gap-3 rounded-xl px-3 py-2.5 text-red-500 focus:bg-red-50 focus:text-red-500 dark:focus:bg-red-900/20">
+            <DropdownMenuItem
+              className="cursor-pointer gap-3 rounded-xl px-3 py-2.5 text-red-500 focus:bg-red-50 focus:text-red-500 dark:focus:bg-red-900/20"
+              onClick={() => {
+                logout();
+                toast.info('Đã đăng xuất');
+                navigate('/login');
+              }}
+            >
               <LogOut className="h-4 w-4" />
               <span className="font-bold">Đăng xuất</span>
             </DropdownMenuItem>

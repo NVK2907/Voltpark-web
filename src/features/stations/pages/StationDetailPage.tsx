@@ -1,5 +1,7 @@
 import { Edit, MapPin, Clock, Power } from 'lucide-react';
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   BarChart,
   Bar,
@@ -19,13 +21,16 @@ import { StatusBadge } from '@/shared/components/common/StatusBadge';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { useConfirm } from '@/shared/hooks/useConfirm';
+import { EditStationSheet } from '../components/EditStationSheet';
 
 export function StationDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { confirm } = useConfirm();
 
-  const station = MOCK_STATIONS.find((s) => s.id === id);
+  const [station, setStation] = useState(() => MOCK_STATIONS.find((s) => s.id === id) ?? null);
+  const [editOpen, setEditOpen] = useState(false);
+
   const chargers = MOCK_CHARGERS.filter((c) => c.stationId === id);
 
   if (!station) {
@@ -44,7 +49,9 @@ export function StationDetailPage() {
       variant: 'destructive',
       onConfirm: async () => {
         // mock api call
-        await new Promise((r) => setTimeout(r, 1000));
+        await new Promise((r) => setTimeout(r, 800));
+        setStation((prev) => (prev ? { ...prev, status: 'maintenance' as const } : prev));
+        toast.success(`Trạm ${station.name} đã chuyển sang bảo trì`);
         // Note: in a real app, this would mutate state/cache
       },
     });
@@ -56,7 +63,7 @@ export function StationDetailPage() {
         breadcrumbs={[{ label: 'Trạm sạc', href: ROUTES.STATIONS }, { label: station.name }]}
         actions={
           <>
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => setEditOpen(true)}>
               <Edit className="mr-2 h-4 w-4" /> Chỉnh sửa
             </Button>
             <Button
@@ -206,6 +213,29 @@ export function StationDetailPage() {
           )}
         </div>
       </div>
+
+      <EditStationSheet
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        station={station}
+        onSave={(data) => {
+          setStation((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  ...data,
+                  status:
+                    data.status === 'active'
+                      ? 'online'
+                      : data.status === 'inactive'
+                        ? 'offline'
+                        : 'maintenance',
+                }
+              : prev,
+          );
+          setEditOpen(false);
+        }}
+      />
     </div>
   );
 }

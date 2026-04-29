@@ -180,6 +180,17 @@ export interface User {
   lastLoginAt: string;
 }
 
+export interface Vehicle {
+  id: string;
+  name: string;
+  plate: string;
+  year: number;
+  range: number;
+  connectors: string[];
+  isDefault: boolean;
+  color: string;
+}
+
 // ─── Alert ───────────────────────────────────────────────────────────────────
 export interface Alert {
   id: string;
@@ -384,4 +395,63 @@ export interface ColumnDef<T> {
   sortable?: boolean;
   render?: (row: T) => React.ReactNode;
   className?: string;
+}
+
+// ─── Edit Station ─────────────────────────────────────────────────────────────
+export interface EditStationFormData {
+  name: string;
+  address: string;
+  operatingHours: string;
+  totalSlots: number;
+  status: 'active' | 'inactive' | 'maintenance';
+}
+
+export interface EditStationSheetProps {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  station: Station;
+  onSave: (data: EditStationFormData) => void;
+}
+
+// ─── Add Station ──────────────────────────────────────────────────────────────
+export interface AddStationFormData {
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  totalSlots: number;
+  operatingHours: string;
+  status: 'online' | 'offline' | 'maintenance';
+  managerId: string;
+}
+
+export interface AddStationSheetProps {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  onAdd: (data: Station) => void;
+}
+
+// ─── Charger Config ───────────────────────────────────────────────────────────
+export interface ChargerConfigFormData {
+  powerKw: 22 | 50 | 150;
+  connectorType: 'Type2' | 'CCS2' | 'CHAdeMO';
+  status: 'available' | 'offline';
+  maxSessionMin: number;
+  pricePerKwh: number;
+  notes: string;
+}
+
+export interface ChargerConfigSheetProps {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  charger: Charger;
+  onSave: (patch: Pick<Charger, 'powerKw' | 'connectorType' | 'status'>) => void;
+}
+
+// ─── Owner Promotions ─────────────────────────────────────────────────────────
+export interface CreatePromotionSheetProps {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+  parkings: { id: string; name: string }[];
+  onAdd: (promo: Promotion) => void;
 }

@@ -10,16 +10,16 @@ export const ROUTES = {
   LOGIN: '/login',
   FORGOT_PASSWORD: '/forgot-password',
   VERIFY_2FA: '/verify-2fa',
-  DASHBOARD: '/dashboard',
-  STATIONS: '/stations',
-  CHARGERS: '/chargers',
-  ANALYTICS: '/analytics',
-  USERS: '/users',
-  ALERTS: '/alerts',
-  AUDIT_LOG: '/audit-log',
-  NOTIFICATIONS: '/notifications',
-  PROFILE: '/profile',
-  SETTINGS: '/settings',
+  DASHBOARD: '/admin/dashboard',
+  STATIONS: '/admin/stations',
+  CHARGERS: '/admin/chargers',
+  ANALYTICS: '/admin/analytics',
+  USERS: '/admin/users',
+  ALERTS: '/admin/alerts',
+  AUDIT_LOG: '/admin/audit-log',
+  NOTIFICATIONS: '/admin/notifications',
+  PROFILE: '/admin/profile',
+  SETTINGS: '/admin/settings',
   // User Portal Routes
   MAP: '/map',
   USER_STATIONS: '/stations',
@@ -30,6 +30,7 @@ export const ROUTES = {
   ONBOARDING: '/onboarding',
   CHARGING: '/charging',
   LIVE_CHARGING: '/charging/live',
+  USER_SETTINGS: '/settings',
 } as const;
 
 export const STATUS_LABELS = {
@@ -111,6 +112,7 @@ export const STAFF_ROUTES = {
   EMERGENCY: '/staff/emergency',
   ME: '/staff/me',
   ME_SYNC: '/staff/me/sync',
+  WALKIN: '/staff/walkin',
 } as const;
 
 export const NAV_GROUPS = [

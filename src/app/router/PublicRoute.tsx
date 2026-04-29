@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
-import { ROUTES } from './routes.config';
+import { ROUTES, AUTH_ROUTES } from '@/lib/constants';
 
 import { useAuthStore } from '@/features/auth';
 import { PageLoader } from '@/shared/components/common/LoadingSpinner';

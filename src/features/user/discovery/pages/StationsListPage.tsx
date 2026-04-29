@@ -76,6 +76,21 @@ const MOCK_STATIONS = [
 
 export default function StationsListPage() {
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [activeFilter, setActiveFilter] = React.useState('Tất cả');
+
+  const filteredStations = MOCK_STATIONS.filter((s) => {
+    const matchesSearch =
+      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.address.toLowerCase().includes(searchQuery.toLowerCase());
+
+    if (!matchesSearch) return false;
+
+    if (activeFilter === 'Tất cả') return true;
+    if (activeFilter === 'DC Sạc nhanh') return s.chargers.some((c) => c.type === 'DC Fast');
+    if (activeFilter === 'Sẵn sàng') return s.status === 'available';
+    // MOCK: 'Gần tôi' and 'Yêu thích' logic
+    return true;
+  });
 
   return (
     <div className="mx-auto max-w-7xl space-y-8 p-6 lg:p-8">
@@ -108,16 +123,17 @@ export default function StationsListPage() {
 
       {/* Quick Filters */}
       <div className="scrollbar-none flex gap-2 overflow-x-auto pb-2">
-        {['Tất cả', 'DC Sạc nhanh', 'Gần tôi', 'Mở cửa 24/7', 'Yêu thích'].map((label, idx) => (
+        {['Tất cả', 'DC Sạc nhanh', 'Sẵn sàng', 'Gần tôi', 'Yêu thích'].map((label) => (
           <Button
             key={label}
-            variant={idx === 0 ? 'default' : 'outline'}
+            variant={activeFilter === label ? 'default' : 'outline'}
             className={cn(
               'h-10 shrink-0 rounded-full px-6 font-bold',
-              idx === 0
+              activeFilter === label
                 ? 'bg-violet-600 hover:bg-violet-700'
                 : 'border-slate-200 dark:border-slate-800',
             )}
+            onClick={() => setActiveFilter(label)}
           >
             {label}
           </Button>
@@ -126,7 +142,7 @@ export default function StationsListPage() {
 
       {/* Stations Grid */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {MOCK_STATIONS.map((station) => (
+        {filteredStations.map((station) => (
           <div
             key={station.id}
             className="group flex flex-col overflow-hidden rounded-3xl border border-slate-100 bg-white transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/10 dark:border-slate-800 dark:bg-slate-900"

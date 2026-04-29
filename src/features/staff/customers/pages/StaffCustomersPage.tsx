@@ -57,7 +57,10 @@ export default function StaffCustomersPage() {
             Tìm kiếm thông tin khách hàng bằng SĐT, Email hoặc Biển số
           </p>
         </div>
-        <Button className="bg-violet-600 hover:bg-violet-700">
+        <Button
+          className="bg-violet-600 hover:bg-violet-700"
+          onClick={() => navigate(STAFF_ROUTES.WALKIN)}
+        >
           <Plus className="mr-2 h-4 w-4" /> Khách walk-in
         </Button>
       </div>
@@ -135,6 +138,10 @@ export default function StaffCustomersPage() {
                             variant="ghost"
                             size="sm"
                             className="text-violet-600 hover:bg-violet-50 hover:text-violet-700"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(STAFF_ROUTES.SESSIONS_NEW);
+                            }}
                           >
                             Bắt đầu sạc
                           </Button>
@@ -150,7 +157,11 @@ export default function StaffCustomersPage() {
                     <tr>
                       <td colSpan={6} className="px-4 py-8 text-center text-muted-foreground">
                         Không tìm thấy khách hàng nào.
-                        <Button variant="link" className="mx-auto mt-2 block text-violet-600">
+                        <Button
+                          variant="link"
+                          className="mx-auto mt-2 block text-violet-600"
+                          onClick={() => navigate(STAFF_ROUTES.WALKIN)}
+                        >
                           Tạo khách walk-in mới
                         </Button>
                       </td>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 import { LiveOpsPanel } from '../components/LiveOpsPanel';
 import { QuickActionsToolbar } from '../components/QuickActionsToolbar';
@@ -12,14 +13,40 @@ import type { ParkingSlot } from '@/types';
 
 export default function StaffHomePage() {
   const [selectedSlot, setSelectedSlot] = useState<ParkingSlot | null>(null);
+  const [isClockedIn, setIsClockedIn] = useState(MOCK_STAFF_CONTEXT.isClockedIn);
 
   return (
     <div className="space-y-6 pb-6">
-      {!MOCK_STAFF_CONTEXT.isClockedIn && (
+      {!isClockedIn && (
         <div className="flex flex-col items-start justify-between gap-4 rounded-md border border-yellow-500/20 bg-yellow-500/10 p-4 text-yellow-700 dark:text-yellow-400 sm:flex-row sm:items-center">
           <span className="font-medium">Bạn chưa chấm công vào ca sáng hôm nay.</span>
-          <Button className="w-full bg-yellow-500 text-white hover:bg-yellow-600 sm:w-auto">
+          <Button
+            className="w-full bg-yellow-500 text-white hover:bg-yellow-600 sm:w-auto"
+            onClick={() => {
+              const now = new Date().toLocaleTimeString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit',
+              });
+              setIsClockedIn(true);
+              toast.success(`Đã chấm công vào lúc ${now}`);
+            }}
+          >
             Chấm công ngay
+          </Button>
+        </div>
+      )}
+
+      {isClockedIn && (
+        <div className="flex flex-col items-start justify-between gap-4 rounded-md border border-emerald-500/20 bg-emerald-500/10 p-4 text-emerald-700 dark:text-emerald-400 sm:flex-row sm:items-center">
+          <span className="font-medium">Bạn đã chấm công vào ca sáng.</span>
+          <Button
+            className="w-full bg-emerald-500 text-white hover:bg-emerald-600 sm:w-auto"
+            onClick={() => {
+              setIsClockedIn(false);
+              toast.info('Đã chấm công ra');
+            }}
+          >
+            ✓ Đã chấm công
           </Button>
         </div>
       )}

@@ -1,4 +1,5 @@
 import { Tag, Copy, CheckCircle2, Clock, Gift } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -7,7 +8,7 @@ import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
 
-const MOCK_VOUCHERS = [
+export const MOCK_VOUCHERS = [
   {
     id: 'v1',
     code: 'EVNEW10',
@@ -39,7 +40,9 @@ const MOCK_VOUCHERS = [
 
 function VoucherCard({ v }: { v: (typeof MOCK_VOUCHERS)[0] }) {
   const [copied, setCopied] = React.useState(false);
-  const copy = () => {
+  const navigate = useNavigate();
+  const copy = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigator.clipboard.writeText(v.code);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -47,8 +50,9 @@ function VoucherCard({ v }: { v: (typeof MOCK_VOUCHERS)[0] }) {
 
   return (
     <div
+      onClick={() => navigate(`/vouchers/${v.id}`)}
       className={cn(
-        'flex overflow-hidden rounded-3xl border bg-white transition-all dark:bg-slate-900',
+        'flex cursor-pointer overflow-hidden rounded-3xl border bg-white transition-all dark:bg-slate-900',
         v.status === 'expired'
           ? 'border-slate-100 opacity-60 dark:border-slate-800'
           : 'border-slate-200 hover:shadow-xl hover:shadow-violet-500/10 dark:border-slate-700',

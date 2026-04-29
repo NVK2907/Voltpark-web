@@ -7,8 +7,11 @@ import {
   RefreshCw,
   AlertTriangle,
   ShieldCheck,
+  Clock,
 } from 'lucide-react';
+import * as React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { ROUTES } from '@/lib/constants';
 import { MOCK_CHARGERS, MOCK_EVENTS, MOCK_STATIONS } from '@/lib/mock-data';
@@ -19,13 +22,18 @@ import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { useConfirm } from '@/shared/hooks/useConfirm';
 import type { ChargingEvent } from '@/types';
+import { ChargerConfigSheet } from '../components/ChargerConfigSheet';
 
 export function ChargerDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { confirm } = useConfirm();
 
-  const charger = MOCK_CHARGERS.find((c) => c.id === id);
+  const [charger, setCharger] = React.useState(
+    () => MOCK_CHARGERS.find((c) => c.id === id) ?? null,
+  );
+  const [configOpen, setConfigOpen] = React.useState(false);
+
   const station = MOCK_STATIONS.find((s) => s.id === charger?.stationId);
   const events = MOCK_EVENTS.filter((e) => e.chargerId === id);
 
@@ -45,6 +53,44 @@ export function ChargerDetailPage() {
       variant: 'destructive',
       onConfirm: async () => {
         await new Promise((r) => setTimeout(r, 1500));
+        toast.success(`Đang gửi lệnh khởi động lại tới ${charger.id}...`);
+      },
+    });
+  };
+
+  const handleMaintenance = () => {
+    confirm({
+      title: 'Chuyển sang bảo trì',
+      description: `Xác nhận chuyển bộ sạc ${charger.id} sang trạng thái bảo trì? Bộ sạc sẽ không nhận phiên sạc mới cho đến khi được khôi phục.`,
+      variant: 'destructive',
+      onConfirm: async () => {
+        await new Promise((r) => setTimeout(r, 800));
+        setCharger((prev) => (prev ? { ...prev, status: 'fault' as const } : prev));
+        toast.success(`Bộ sạc ${charger.id} đã chuyển sang bảo trì`);
+      },
+    });
+  };
+
+  const handleForceStop = () => {
+    confirm({
+      title: 'Ngắt phiên sạc khẩn cấp',
+      description:
+        'Thao tác này sẽ ngừng phiên sạc ngay lập tức. Người dùng sẽ được hoàn tiền phần điện chưa sử dụng. Tiếp tục?',
+      variant: 'destructive',
+      onConfirm: async () => {
+        await new Promise((r) => setTimeout(r, 1000));
+        setCharger((prev) =>
+          prev
+            ? {
+                ...prev,
+                status: 'available' as const,
+                sessionDurationMin: undefined,
+                currentUserId: undefined,
+                currentEnergyKwh: 0,
+              }
+            : prev,
+        );
+        toast.success('Đã ngắt phiên sạc. Hoàn tiền đang được xử lý...');
       },
     });
   };
@@ -68,13 +114,17 @@ export function ChargerDetailPage() {
         breadcrumbs={[{ label: 'Bộ sạc', href: ROUTES.CHARGERS }, { label: charger.id }]}
         actions={
           <>
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => setConfigOpen(true)}>
               <Edit className="mr-2 h-4 w-4" /> Cấu hình
             </Button>
             <Button variant="outline" onClick={handleRestart}>
               <RefreshCw className="mr-2 h-4 w-4" /> Khởi động lại
             </Button>
-            <Button variant="destructive" onClick={() => {}} disabled={charger.status === 'fault'}>
+            <Button
+              variant="destructive"
+              onClick={handleMaintenance}
+              disabled={charger.status === 'fault'}
+            >
               <Wrench className="mr-2 h-4 w-4" /> Bảo trì
             </Button>
           </>
@@ -197,12 +247,15 @@ export function ChargerDetailPage() {
                 </div>
 
                 <div className="flex items-center justify-between border-t pt-4">
-                  <span className="text-sm text-muted-foreground">Thời gian</span>
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">Thời gian</span>
+                  </div>
                   <span className="font-medium text-sky-600 dark:text-sky-400">
                     {charger.sessionDurationMin} phút
                   </span>
                 </div>
-                <Button variant="destructive" className="w-full" onClick={() => {}}>
+                <Button variant="destructive" className="w-full" onClick={handleForceStop}>
                   Ngắt phiên sạc khẩn cấp
                 </Button>
               </div>
@@ -261,6 +314,13 @@ export function ChargerDetailPage() {
           )}
         </CardContent>
       </Card>
+
+      <ChargerConfigSheet
+        open={configOpen}
+        onOpenChange={setConfigOpen}
+        charger={charger}
+        onSave={(patch) => setCharger((prev) => (prev ? { ...prev, ...patch } : prev))}
+      />
     </div>
   );
 }

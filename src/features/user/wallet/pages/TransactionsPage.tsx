@@ -1,4 +1,5 @@
 import { ArrowLeft, Search, Download, Plus, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +8,7 @@ import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 
-const ALL_TX = [
+export const ALL_TX = [
   {
     id: 't1',
     type: 'charge',
@@ -60,6 +61,7 @@ const ALL_TX = [
 
 export default function TransactionsPage() {
   const [search, setSearch] = React.useState('');
+  const navigate = useNavigate();
 
   const typeLabel: Record<string, { label: string; color: string }> = {
     charge: { label: 'Sạc xe', color: 'bg-violet-100 text-violet-600 dark:bg-violet-900/20' },
@@ -124,6 +126,7 @@ export default function TransactionsPage() {
           (tx) => (
             <div
               key={tx.id}
+              onClick={() => navigate(`/wallet/transactions/${tx.id}`)}
               className="flex cursor-pointer items-center gap-5 p-5 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50"
             >
               <div

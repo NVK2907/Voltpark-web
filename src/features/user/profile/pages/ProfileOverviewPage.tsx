@@ -13,6 +13,7 @@ import {
   Edit2,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
@@ -75,7 +76,10 @@ export default function ProfileOverviewPage() {
             <div className="flex h-28 w-28 items-center justify-center rounded-3xl bg-gradient-to-br from-violet-500 to-indigo-600 text-4xl font-black shadow-2xl">
               KV
             </div>
-            <button className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-900 shadow-lg transition-colors hover:bg-violet-50">
+            <button
+              className="absolute -bottom-2 -right-2 flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-900 shadow-lg transition-colors hover:bg-violet-50"
+              onClick={() => toast.info('Tính năng thay đổi ảnh đang được phát triển')}
+            >
               <Edit2 className="h-4 w-4" />
             </button>
           </div>

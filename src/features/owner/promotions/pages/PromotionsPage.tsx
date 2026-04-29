@@ -7,13 +7,15 @@ import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent } from '@/shared/components/ui/card';
 import { Input } from '@/shared/components/ui/input';
 import type { Promotion } from '@/types';
+import { CreatePromotionSheet } from '../components/CreatePromotionSheet';
 
 export default function PromotionsPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [createOpen, setCreateOpen] = useState(false);
   const parkings = getOwnerParkings();
 
-  // Mock promotion data
-  const MOCK_PROMOTIONS: Promotion[] = [
+  // Mock promotion data converted to state
+  const [promotions, setPromotions] = useState<Promotion[]>([
     {
       id: 'PRM-001',
       ownerId: 'OWN001',
@@ -52,9 +54,9 @@ export default function PromotionsPage() {
       status: 'expired',
       usageCount: 88,
     },
-  ];
+  ]);
 
-  const promotions = MOCK_PROMOTIONS.filter((p) =>
+  const filtered = promotions.filter((p) =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
@@ -65,7 +67,10 @@ export default function PromotionsPage() {
           <h2 className="text-2xl font-bold tracking-tight">Khuyến mãi</h2>
           <p className="text-muted-foreground">Thu hút khách hàng bằng các chiến dịch ưu đãi</p>
         </div>
-        <Button className="gap-2">
+        <Button
+          className="gap-2 bg-emerald-600 text-white hover:bg-emerald-700"
+          onClick={() => setCreateOpen(true)}
+        >
           <Plus className="h-4 w-4" /> Tạo chiến dịch mới
         </Button>
       </div>
@@ -83,7 +88,7 @@ export default function PromotionsPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {promotions.map((promo) => (
+        {filtered.map((promo) => (
           <Card key={promo.id} className="cursor-pointer transition-colors hover:border-primary/50">
             <CardContent className="space-y-4 p-5">
               <div className="flex items-start justify-between">
@@ -128,7 +133,22 @@ export default function PromotionsPage() {
             </CardContent>
           </Card>
         ))}
+
+        {filtered.length === 0 && (
+          <div className="col-span-full rounded-xl border border-dashed py-12 text-center text-muted-foreground">
+            <Tag className="mx-auto mb-3 h-8 w-8 opacity-30" />
+            <p className="font-medium">Không tìm thấy chiến dịch nào</p>
+            <p className="mt-1 text-sm">Thử tạo chiến dịch mới hoặc thay đổi từ khóa tìm kiếm</p>
+          </div>
+        )}
       </div>
+
+      <CreatePromotionSheet
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+        parkings={parkings}
+        onAdd={(newPromo) => setPromotions((prev) => [newPromo, ...prev])}
+      />
     </div>
   );
 }

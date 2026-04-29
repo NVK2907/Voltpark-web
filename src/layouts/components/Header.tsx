@@ -3,7 +3,8 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '@/lib/constants';
+import { useAuthStore } from '@/features/auth';
+import { ROUTES, AUTH_ROUTES } from '@/lib/constants';
 import { MOCK_ADMIN_PROFILE } from '@/lib/mock-data';
 import { GlobalSearch } from '@/shared/components/common/GlobalSearch';
 import { Button } from '@/shared/components/ui/button';
@@ -23,6 +24,7 @@ interface HeaderProps {
 export function Header({ onMenuClick }: HeaderProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const logout = useAuthStore((s) => s.logout);
   const [unreadCount, setUnreadCount] = React.useState(3);
 
   const toggleLanguage = () => {
@@ -97,7 +99,13 @@ export function Header({ onMenuClick }: HeaderProps) {
               <span>Cài đặt hệ thống</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onClick={() => {
+                logout();
+                navigate(AUTH_ROUTES.LOGIN);
+              }}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               <span>Đăng xuất</span>
             </DropdownMenuItem>

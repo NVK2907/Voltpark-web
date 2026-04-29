@@ -14,10 +14,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
+import { ShiftFormModal } from '../components/ShiftFormModal';
+import { toast } from 'sonner';
 
 export default function SchedulePage() {
   const parkings = getOwnerParkings();
   const [parkingFilter, setParkingFilter] = React.useState('all');
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleSuccess = (values: any) => {
+    console.log('New shift:', values);
+    // In a real app, we would update the grid state here
+  };
 
   const days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
 
@@ -72,10 +80,12 @@ export default function SchedulePage() {
           <h2 className="text-2xl font-bold tracking-tight">Lịch ca trực</h2>
           <p className="text-muted-foreground">Phân công lịch làm việc cho nhân viên tại bãi đỗ</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setIsModalOpen(true)}>
           <Plus className="h-4 w-4" /> Phân ca mới
         </Button>
       </div>
+
+      <ShiftFormModal open={isModalOpen} onOpenChange={setIsModalOpen} onSuccess={handleSuccess} />
 
       <div className="flex flex-col items-center justify-between gap-4 rounded-lg border bg-muted/30 p-3 sm:flex-row">
         <div className="flex items-center gap-2">

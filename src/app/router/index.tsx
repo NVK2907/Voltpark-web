@@ -163,8 +163,13 @@ const StaffDetailPage = React.lazy(() =>
 const SchedulePage = React.lazy(() =>
   import('@/features/owner/staff/pages/SchedulePage').then((m) => ({ default: m.default })),
 );
-const MaintenancePage = React.lazy(() =>
+const OwnerMaintenancePage = React.lazy(() =>
   import('@/features/owner/maintenance/pages/MaintenancePage').then((m) => ({
+    default: m.default,
+  })),
+);
+const MaintenanceDetailPage = React.lazy(() =>
+  import('@/features/owner/maintenance/pages/MaintenanceDetailPage').then((m) => ({
     default: m.default,
   })),
 );
@@ -219,6 +224,9 @@ const StaffCustomerDetailPage = React.lazy(() =>
   import('@/features/staff/customers/pages/StaffCustomerDetailPage').then((m) => ({
     default: m.default,
   })),
+);
+const StaffWalkInPage = React.lazy(() =>
+  import('@/features/staff/customers/pages/StaffWalkInPage').then((m) => ({ default: m.default })),
 );
 const StaffTasksPage = React.lazy(() =>
   import('@/features/staff/tasks/pages/StaffTasksPage').then((m) => ({ default: m.default })),
@@ -348,6 +356,9 @@ const UserNewBookingWizardPage = React.lazy(() =>
 );
 
 // --- User Charging Module ---
+const CheckInPage = React.lazy(() =>
+  import('@/features/user/checkin/pages/CheckInPage').then((m) => ({ default: m.default })),
+);
 const ChargingDashboardPage = React.lazy(() =>
   import('@/features/user/charging/pages/ChargingDashboardPage').then((m) => ({
     default: m.default,
@@ -375,10 +386,20 @@ const PaymentMethodsPage = React.lazy(() =>
 const TransactionsPage = React.lazy(() =>
   import('@/features/user/wallet/pages/TransactionsPage').then((m) => ({ default: m.default })),
 );
+const TransactionDetailPage = React.lazy(() =>
+  import('@/features/user/wallet/pages/TransactionDetailPage').then((m) => ({
+    default: m.default,
+  })),
+);
 
 // --- User Engagement Module ---
 const VouchersPage = React.lazy(() =>
   import('@/features/user/engagement/pages/VouchersPage').then((m) => ({ default: m.default })),
+);
+const VoucherDetailPage = React.lazy(() =>
+  import('@/features/user/engagement/pages/VoucherDetailPage').then((m) => ({
+    default: m.default,
+  })),
 );
 const LoyaltyPage = React.lazy(() =>
   import('@/features/user/engagement/pages/LoyaltyPage').then((m) => ({ default: m.default })),
@@ -388,6 +409,9 @@ const ReferralPage = React.lazy(() =>
 );
 const ReviewsPage = React.lazy(() =>
   import('@/features/user/engagement/pages/ReviewsPage').then((m) => ({ default: m.default })),
+);
+const UserSettingsPage = React.lazy(() =>
+  import('@/features/user/settings/pages/SettingsPage').then((m) => ({ default: m.default })),
 );
 
 // --- User Notifications Module ---
@@ -487,6 +511,7 @@ export const router = createBrowserRouter([
       { path: 'bookings', element: withSuspense(<UserMyBookingsPage />) },
       { path: 'bookings/new', element: withSuspense(<UserNewBookingWizardPage />) },
       // Charging
+      { path: 'checkin', element: withSuspense(<CheckInPage />) },
       { path: 'charging', element: withSuspense(<ChargingDashboardPage />) },
       { path: 'charging/live', element: withSuspense(<LiveChargingPage />) },
       { path: 'charging/sessions/:id', element: withSuspense(<ChargingSessionDetailPage />) },
@@ -495,11 +520,14 @@ export const router = createBrowserRouter([
       { path: 'wallet/topup', element: withSuspense(<TopUpPage />) },
       { path: 'wallet/methods', element: withSuspense(<PaymentMethodsPage />) },
       { path: 'wallet/transactions', element: withSuspense(<TransactionsPage />) },
+      { path: 'wallet/transactions/:id', element: withSuspense(<TransactionDetailPage />) },
       // Engagement
       { path: 'vouchers', element: withSuspense(<VouchersPage />) },
+      { path: 'vouchers/:id', element: withSuspense(<VoucherDetailPage />) },
       { path: 'loyalty', element: withSuspense(<LoyaltyPage />) },
       { path: 'referral', element: withSuspense(<ReferralPage />) },
       { path: 'reviews', element: withSuspense(<ReviewsPage />) },
+      { path: 'settings', element: withSuspense(<UserSettingsPage />) },
       // Notifications
       { path: 'notifications', element: withSuspense(<UserNotificationsPage />) },
       // Support
@@ -539,59 +567,59 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/',
+    path: '/admin',
     element: <PrivateRoute>{withSuspense(<AdminLayout />)}</PrivateRoute>,
     children: [
       {
-        path: ROUTES.DASHBOARD,
+        path: 'dashboard',
         element: withSuspense(<DashboardPage />),
       },
       {
-        path: ROUTES.STATIONS,
+        path: 'stations',
         element: withSuspense(<StationsListPage />),
       },
       {
-        path: `${ROUTES.STATIONS}/:id`,
+        path: 'stations/:id',
         element: withSuspense(<StationDetailPage />),
       },
       {
-        path: ROUTES.CHARGERS,
+        path: 'chargers',
         element: withSuspense(<ChargersListPage />),
       },
       {
-        path: `${ROUTES.CHARGERS}/:id`,
+        path: 'chargers/:id',
         element: withSuspense(<ChargerDetailPage />),
       },
       {
-        path: ROUTES.ANALYTICS,
+        path: 'analytics',
         element: withSuspense(<AnalyticsPage />),
       },
       {
-        path: ROUTES.USERS,
+        path: 'users',
         element: withSuspense(<UsersListPage />),
       },
       {
-        path: `${ROUTES.USERS}/:id`,
+        path: 'users/:id',
         element: withSuspense(<UserDetailPage />),
       },
       {
-        path: ROUTES.ALERTS,
+        path: 'alerts',
         element: withSuspense(<AlertsPage />),
       },
       {
-        path: ROUTES.AUDIT_LOG,
+        path: 'audit-log',
         element: withSuspense(<AuditLogPage />),
       },
       {
-        path: ROUTES.SETTINGS,
+        path: 'settings',
         element: withSuspense(<SettingsPage />),
       },
       {
-        path: ROUTES.NOTIFICATIONS,
+        path: 'notifications',
         element: withSuspense(<NotificationsPage />),
       },
       {
-        path: ROUTES.PROFILE,
+        path: 'profile',
         element: withSuspense(<ProfilePage />),
       },
     ],
@@ -672,10 +700,9 @@ export const router = createBrowserRouter([
         path: 'staff/:id',
         element: withSuspense(<StaffDetailPage />),
       },
-      {
-        path: 'maintenance',
-        element: withSuspense(<MaintenancePage />),
-      },
+      // Maintenance
+      { path: 'maintenance', element: withSuspense(<OwnerMaintenancePage />) },
+      { path: 'maintenance/:id', element: withSuspense(<MaintenanceDetailPage />) },
       {
         path: 'reports',
         element: withSuspense(<ReportsPage />),
@@ -756,6 +783,10 @@ export const router = createBrowserRouter([
       {
         path: 'report/history',
         element: withSuspense(<StaffReportHistoryPage />),
+      },
+      {
+        path: 'walkin',
+        element: withSuspense(<StaffWalkInPage />),
       },
       {
         path: 'emergency',

@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from 'react-router-dom';
 
-import { ROUTES } from './routes.config';
+import { AUTH_ROUTES } from '@/lib/constants';
 
 import { useAuthStore } from '@/features/auth';
 import { PageLoader } from '@/shared/components/common/LoadingSpinner';
@@ -24,7 +24,7 @@ export function PrivateRoute({ children }: PrivateRouteProps) {
 
   if (!isAuthenticated) {
     return (
-      <Navigate to={`${ROUTES.LOGIN}?from=${encodeURIComponent(location.pathname)}`} replace />
+      <Navigate to={`${AUTH_ROUTES.LOGIN}?from=${encodeURIComponent(location.pathname)}`} replace />
     );
   }
 

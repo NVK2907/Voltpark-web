@@ -20,6 +20,10 @@ export function QuickActionsToolbar() {
         <QrCode className="mr-2 h-4 w-4" /> Quét QR
       </Button>
 
+      <Button variant="outline" onClick={() => navigate(STAFF_ROUTES.WALKIN)}>
+        <Plus className="mr-2 h-4 w-4" /> Khách vãng lai
+      </Button>
+
       <Button variant="outline" onClick={() => navigate(STAFF_ROUTES.REPORT)}>
         <AlertTriangle className="mr-2 h-4 w-4 text-amber-500" /> Báo lỗi
       </Button>

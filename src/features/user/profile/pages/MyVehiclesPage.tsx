@@ -1,8 +1,11 @@
 import { ArrowLeft, Plus, Car, Trash2, Zap, Star } from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
+import { VehicleFormSheet } from '../components/VehicleFormSheet';
+import type { Vehicle } from '@/types';
 
 const VEHICLES = [
   {
@@ -18,6 +21,41 @@ const VEHICLES = [
 ];
 
 export default function MyVehiclesPage() {
+  const [vehicles, setVehicles] = useState<Vehicle[]>(VEHICLES as Vehicle[]);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [editingVehicle, setEditingVehicle] = useState<Vehicle | null>(null);
+
+  const handleAdd = () => {
+    setEditingVehicle(null);
+    setIsSheetOpen(true);
+  };
+
+  const handleEdit = (vehicle: Vehicle) => {
+    setEditingVehicle(vehicle);
+    setIsSheetOpen(true);
+  };
+
+  const handleDelete = (id: string) => {
+    setVehicles(vehicles.filter((v) => v.id !== id));
+  };
+
+  const handleSuccess = (values: Partial<Vehicle>) => {
+    if (editingVehicle) {
+      setVehicles(vehicles.map((v) => (v.id === editingVehicle.id ? { ...v, ...values } : v)));
+    } else {
+      const newVehicle: Vehicle = {
+        id: Math.random().toString(36).substr(2, 9),
+        name: values.name!,
+        plate: values.plate!,
+        year: values.year!,
+        range: values.range!,
+        connectors: ['CCS2'],
+        isDefault: values.isDefault ?? false,
+        color: 'from-violet-500 to-indigo-600',
+      };
+      setVehicles([...vehicles, newVehicle]);
+    }
+  };
   return (
     <div className="mx-auto max-w-3xl space-y-8 p-6 lg:p-10">
       <div className="flex items-center justify-between">
@@ -32,13 +70,16 @@ export default function MyVehiclesPage() {
             <p className="font-medium text-slate-500">Quản lý xe điện đã đăng ký.</p>
           </div>
         </div>
-        <Button className="h-11 gap-2 rounded-2xl bg-violet-600 px-5 font-bold hover:bg-violet-700">
+        <Button
+          className="h-11 gap-2 rounded-2xl bg-violet-600 px-5 font-bold hover:bg-violet-700"
+          onClick={handleAdd}
+        >
           <Plus className="h-4 w-4" /> Thêm xe
         </Button>
       </div>
 
       <div className="space-y-5">
-        {VEHICLES.map((v) => (
+        {vehicles.map((v) => (
           <div
             key={v.id}
             className="group overflow-hidden rounded-[32px] border border-slate-100 bg-white transition-all hover:shadow-2xl dark:border-slate-800 dark:bg-slate-900"
@@ -89,6 +130,7 @@ export default function MyVehiclesPage() {
                     variant="outline"
                     size="sm"
                     className="gap-1 rounded-xl border-slate-200 font-bold dark:border-slate-700"
+                    onClick={() => handleEdit(v)}
                   >
                     Chỉnh sửa
                   </Button>
@@ -96,6 +138,7 @@ export default function MyVehiclesPage() {
                     variant="ghost"
                     size="sm"
                     className="rounded-xl text-red-400 hover:bg-red-50 hover:text-red-600"
+                    onClick={() => handleDelete(v.id)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -107,11 +150,21 @@ export default function MyVehiclesPage() {
       </div>
 
       {/* Add Vehicle CTA */}
-      <button className="group w-full rounded-3xl border-2 border-dashed border-slate-200 p-10 text-center transition-all hover:border-violet-300 hover:bg-violet-50/50 dark:border-slate-800">
+      <button
+        className="group w-full rounded-3xl border-2 border-dashed border-slate-200 p-10 text-center transition-all hover:border-violet-300 hover:bg-violet-50/50 dark:border-slate-800"
+        onClick={handleAdd}
+      >
         <Plus className="mx-auto mb-3 h-10 w-10 text-slate-300 transition-colors group-hover:text-violet-500" />
         <p className="font-black text-slate-400 group-hover:text-violet-600">Thêm xe mới</p>
         <p className="mt-1 text-sm text-slate-400">Đăng ký xe để sạc nhanh hơn</p>
       </button>
+
+      <VehicleFormSheet
+        open={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
+        vehicle={editingVehicle}
+        onSuccess={handleSuccess}
+      />
     </div>
   );
 }

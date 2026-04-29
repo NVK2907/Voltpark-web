@@ -8,6 +8,7 @@ import { DataTable } from '@/shared/components/common/DataTable';
 import { StatusBadge } from '@/shared/components/common/StatusBadge';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
+import { StaffFormSheet } from '../components/StaffFormSheet';
 import type { Staff } from '@/types';
 
 export const MOCK_STAFF: Staff[] = [
@@ -56,8 +57,22 @@ export default function StaffListPage() {
   const navigate = useNavigate();
   const parkings = getOwnerParkings();
   const [searchTerm, setSearchTerm] = useState('');
+  const [staffList, setStaffList] = useState<Staff[]>(MOCK_STAFF);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  const staff = MOCK_STAFF.filter(
+  const handleAddSuccess = (values: any) => {
+    const newStaff: Staff = {
+      id: `STF-${Math.floor(Math.random() * 1000)}`,
+      ownerId: 'OWN001',
+      status: 'off_duty',
+      hireDate: new Date().toISOString(),
+      performance: { sessionsHandled: 0, complaintsResolved: 0, rating: 5.0 },
+      ...values,
+    };
+    setStaffList([newStaff, ...staffList]);
+  };
+
+  const staff = staffList.filter(
     (s) =>
       s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       s.email.toLowerCase().includes(searchTerm.toLowerCase()),
@@ -113,10 +128,16 @@ export default function StaffListPage() {
           <h2 className="text-2xl font-bold tracking-tight">Nhân sự</h2>
           <p className="text-muted-foreground">Quản lý đội ngũ nhân viên tại các bãi đỗ</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setIsSheetOpen(true)}>
           <UserPlus className="h-4 w-4" /> Thêm nhân viên
         </Button>
       </div>
+
+      <StaffFormSheet
+        open={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
+        onSuccess={handleAddSuccess}
+      />
 
       <div className="flex items-center justify-between gap-4">
         <div className="relative w-full sm:max-w-md">

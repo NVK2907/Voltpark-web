@@ -33,14 +33,14 @@ const USER_NAV_GROUPS = [
     items: [
       { label: 'Lịch sử sạc', href: '/bookings', icon: 'Calendar' },
       { label: 'Ví & Thanh toán', href: '/wallet', icon: 'Wallet' },
-      { label: 'Xe của tôi', href: '/vehicles', icon: 'Car' },
+      { label: 'Xe của tôi', href: '/profile/vehicles', icon: 'Car' },
     ],
   },
   {
     label: 'Cộng đồng',
     items: [
       { label: 'Đánh giá', href: '/reviews', icon: 'Star' },
-      { label: 'Check-in', href: '/checkins', icon: 'MapPin' },
+      { label: 'Check-in', href: '/checkin', icon: 'MapPin' },
     ],
   },
 ];

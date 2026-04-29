@@ -1,5 +1,43 @@
 import { Search, Plus, Wrench } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+
+export const MOCK_MAINTENANCE_REQUESTS: MaintenanceRequest[] = [
+  {
+    id: 'MT-001',
+    ownerId: 'OWN001',
+    chargerId: 'CHG-001',
+    parkingId: 'ST001',
+    type: 'charger_repair',
+    description: 'Súng sạc cắm vào xe không nhận',
+    priority: 'high',
+    status: 'submitted',
+    createdAt: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: 'MT-002',
+    ownerId: 'OWN001',
+    chargerId: 'CHG-012',
+    parkingId: 'ST003',
+    type: 'charger_repair',
+    description: 'Màn hình bị đơ, không hiển thị mã QR',
+    priority: 'medium',
+    status: 'in_progress',
+    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
+  },
+  {
+    id: 'MT-003',
+    ownerId: 'OWN001',
+    chargerId: 'CHG-005',
+    parkingId: 'ST001',
+    type: 'facility',
+    description: 'Bảo dưỡng định kỳ',
+    priority: 'low',
+    status: 'completed',
+    createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
+    completedAt: new Date(Date.now() - 86400000 * 29).toISOString(),
+  },
+];
 
 import { getOwnerParkings } from '@/lib/utils-owner';
 import { StatusBadge } from '@/shared/components/common/StatusBadge';
@@ -13,51 +51,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
+import { MaintenanceFormSheet } from '../components/MaintenanceFormSheet';
 import type { MaintenanceRequest } from '@/types';
 
 export default function MaintenancePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [parkingFilter, setParkingFilter] = useState('all');
+  const [requestsList, setRequestsList] = useState<MaintenanceRequest[]>(MOCK_MAINTENANCE_REQUESTS);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const navigate = useNavigate();
   const parkings = getOwnerParkings();
 
-  const MOCK_REQUESTS: MaintenanceRequest[] = [
-    {
-      id: 'MT-001',
+  const handleAddSuccess = (values: any) => {
+    const newRequest: MaintenanceRequest = {
+      id: `MT-${Math.floor(Math.random() * 1000)
+        .toString()
+        .padStart(3, '0')}`,
       ownerId: 'OWN001',
-      chargerId: 'CHG-001',
-      parkingId: 'ST001',
-      type: 'charger_repair',
-      description: 'Súng sạc cắm vào xe không nhận',
-      priority: 'high',
       status: 'submitted',
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-    {
-      id: 'MT-002',
-      ownerId: 'OWN001',
-      chargerId: 'CHG-012',
-      parkingId: 'ST003',
-      type: 'charger_repair',
-      description: 'Màn hình bị đơ, không hiển thị mã QR',
-      priority: 'medium',
-      status: 'in_progress',
-      createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    },
-    {
-      id: 'MT-003',
-      ownerId: 'OWN001',
-      chargerId: 'CHG-005',
-      parkingId: 'ST001',
-      type: 'facility',
-      description: 'Bảo dưỡng định kỳ',
-      priority: 'low',
-      status: 'completed',
-      createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
-      completedAt: new Date(Date.now() - 86400000 * 29).toISOString(),
-    },
-  ];
+      createdAt: new Date().toISOString(),
+      ...values,
+    };
+    setRequestsList([newRequest, ...requestsList]);
+  };
 
-  const requests = MOCK_REQUESTS.filter((r) => {
+  const requests = requestsList.filter((r) => {
     if (
       searchTerm &&
       (!r.chargerId || !r.chargerId.toLowerCase().includes(searchTerm.toLowerCase())) &&
@@ -77,10 +95,16 @@ export default function MaintenancePage() {
             Tạo và theo dõi các yêu cầu bảo trì, sửa chữa trạm sạc
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setIsSheetOpen(true)}>
           <Plus className="h-4 w-4" /> Tạo yêu cầu mới
         </Button>
       </div>
+
+      <MaintenanceFormSheet
+        open={isSheetOpen}
+        onOpenChange={setIsSheetOpen}
+        onSuccess={handleAddSuccess}
+      />
 
       <div className="flex flex-col items-center gap-4 rounded-lg border bg-muted/30 p-3 sm:flex-row">
         <div className="relative w-full sm:max-w-md">
@@ -109,7 +133,11 @@ export default function MaintenancePage() {
 
       <div className="space-y-4">
         {requests.map((req) => (
-          <Card key={req.id}>
+          <Card
+            key={req.id}
+            className="cursor-pointer transition-colors hover:bg-muted/5"
+            onClick={() => navigate(`/owner/maintenance/${req.id}`)}
+          >
             <CardContent className="flex flex-col items-start justify-between gap-4 p-4 sm:flex-row sm:p-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">

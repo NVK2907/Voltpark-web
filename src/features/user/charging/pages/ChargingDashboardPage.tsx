@@ -1,23 +1,23 @@
 import { Zap, History, ArrowRight, Activity, TrendingUp, AlertCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Progress } from '@/shared/components/ui/progress';
 
 export default function ChargingDashboardPage() {
+  const navigate = useNavigate();
   return (
     <div className="mx-auto max-w-7xl space-y-10 p-6 lg:p-10">
       <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
         <div>
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white">
-            Trình điều khiển sạc
-          </h1>
+          <h1 className="text-4xl font-black text-slate-900 dark:text-white">Sạc xe</h1>
           <p className="mt-1 font-medium text-slate-500">
-            Giám sát và điều khiển các phiên sạc thời gian thực.
+            Bắt đầu hoặc theo dõi phiên sạc của bạn.
           </p>
         </div>
-        <Link to="/charging/history">
+        <Link to="/wallet/transactions">
           <Button
             variant="outline"
             className="h-12 gap-2 rounded-2xl border-slate-200 font-bold dark:border-slate-800"
@@ -25,6 +25,26 @@ export default function ChargingDashboardPage() {
             <History className="h-5 w-5" /> Lịch sử sạc
           </Button>
         </Link>
+      </div>
+
+      {/* Hero Banner */}
+      <div className="rounded-[40px] bg-gradient-to-r from-indigo-600 to-indigo-500 p-10 text-white shadow-2xl shadow-indigo-600/20">
+        <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+          <div className="max-w-md space-y-2">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-indigo-200">
+              Sẵn sàng sạc?
+            </p>
+            <h2 className="text-4xl font-black leading-tight">Bắt đầu ngay hôm nay</h2>
+            <p className="font-medium text-indigo-100">
+              Quét mã QR hoặc nhập mã trạm để bắt đầu phiên sạc một cách nhanh chóng.
+            </p>
+          </div>
+          <Link to="/checkin">
+            <Button className="h-16 rounded-[24px] bg-white px-10 text-lg font-black text-indigo-600 shadow-xl hover:bg-indigo-50">
+              SẠC NGAY <ArrowRight className="ml-2 h-6 w-6" />
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Active Charging Session Hero */}
@@ -98,7 +118,10 @@ export default function ChargingDashboardPage() {
             </div>
 
             <div className="space-y-4">
-              <Button className="h-14 w-full rounded-2xl bg-white text-lg font-black text-slate-900 hover:bg-slate-100">
+              <Button
+                className="h-14 w-full rounded-2xl bg-white text-lg font-black text-slate-900 hover:bg-slate-100"
+                onClick={() => toast.success('Phiên sạc đã được dừng')}
+              >
                 DỪNG SẠC NGAY
               </Button>
               <Link to="/charging/live" className="block">
