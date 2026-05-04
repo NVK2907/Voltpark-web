@@ -5,12 +5,28 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Button } from '@/shared/components/ui/button';
 
+import { useAuthStore } from '@/features/auth';
+
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Set mock auth for testing
+    useAuthStore.getState().setAuth({
+      user: {
+        id: 'USR002',
+        email: 'ttb@example.com',
+        name: 'Trần Thị B',
+        role: 'user',
+        avatarUrl: 'https://i.pravatar.cc/100?img=5',
+      },
+      accessToken: 'mock-token',
+      refreshToken: 'mock-refresh-token',
+    });
+
     navigate('/map');
   };
 

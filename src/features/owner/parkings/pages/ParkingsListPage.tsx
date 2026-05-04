@@ -1,4 +1,4 @@
-import { Download, Search, LayoutGrid, List } from 'lucide-react';
+import { Download, Search, LayoutGrid, List, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -80,9 +80,14 @@ export default function ParkingsListPage() {
             Quản lý {allParkings.length} bãi đỗ đang hoạt động
           </p>
         </div>
-        <Button variant="outline" className="gap-2">
-          <Download className="h-4 w-4" /> Xuất danh sách
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" className="gap-2">
+            <Download className="h-4 w-4" /> Xuất danh sách
+          </Button>
+          <Button className="gap-2" onClick={() => {}}>
+            <Plus className="h-4 w-4" /> Thêm bãi đỗ
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">

@@ -76,6 +76,7 @@ export function DashboardPage() {
           subtext="Tỉ lệ lấp đầy hiện tại"
           icon={ParkingSquare}
           color="default"
+          href={ROUTES.STATIONS}
         />
         <KpiCard
           label="Sức khỏe hệ thống"

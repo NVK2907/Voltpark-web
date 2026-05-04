@@ -3,7 +3,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { AUTH_ROUTES, ROUTES } from '@/lib/constants';
+import { AUTH_ROUTES, ROUTES, OWNER_ROUTES } from '@/lib/constants';
+import { useAuthStore } from '@/features/auth';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent } from '@/shared/components/ui/card';
 
@@ -60,8 +61,33 @@ export function Verify2FaPage() {
         }, 1000);
       });
 
+      // Set auth state dynamically based on email (for testing)
+      const email = localStorage.getItem('login_email');
+      const isOwner = email === 'nva@example.com';
+      const isStaff = email === 'staff@evcharge.vn';
+
+      useAuthStore.getState().setAuth({
+        user: {
+          id: isOwner ? 'USR001' : isStaff ? 'STF-001' : '1',
+          email: email || 'admin@evcharge.vn',
+          name: isOwner ? 'Nguyễn Văn A' : isStaff ? 'Staff User' : 'Admin User',
+          role: isOwner ? 'owner' : isStaff ? 'staff' : 'admin',
+          avatarUrl: null,
+        },
+        accessToken: 'mock-token',
+        refreshToken: 'mock-refresh-token',
+      });
+
+      const user = useAuthStore.getState().user;
       toast.success('Xác thực thành công');
-      navigate(ROUTES.DASHBOARD);
+
+      if (user?.role === 'owner') {
+        navigate(OWNER_ROUTES.DASHBOARD);
+      } else if (user?.role === 'staff') {
+        navigate('/staff/home');
+      } else {
+        navigate(ROUTES.DASHBOARD);
+      }
     } catch (error: any) {
       toast.error(error.message);
     } finally {

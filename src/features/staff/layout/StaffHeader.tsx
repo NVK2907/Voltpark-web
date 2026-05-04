@@ -1,13 +1,22 @@
-import { Menu, Bell, Plus, Sun, User } from 'lucide-react';
+import { Menu, Bell, Plus, Sun, User, LogOut, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import { GlobalSearch } from './GlobalSearch';
 import { ShiftStatusPill } from './ShiftStatusPill';
 
-import { STAFF_ROUTES } from '@/lib/constants';
+import { STAFF_ROUTES, AUTH_ROUTES } from '@/lib/constants';
 import { MOCK_STAFF_CONTEXT } from '@/lib/mock-staff';
 import { useStaffActionQueue } from '@/lib/staff-action-queue';
+import { useAuthStore } from '@/features/auth';
 import { Button } from '@/shared/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/shared/components/ui/dropdown-menu';
 
 export function StaffHeader({ onMenuClick }: { onMenuClick: () => void }) {
   const navigate = useNavigate();
@@ -63,13 +72,41 @@ export function StaffHeader({ onMenuClick }: { onMenuClick: () => void }) {
             <Sun className="h-5 w-5" />
           </Button>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-full bg-muted/50 text-muted-foreground"
-          >
-            <User className="h-5 w-5" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full bg-muted/50 text-muted-foreground"
+              >
+                <User className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Tài khoản Staff</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate(STAFF_ROUTES.PROFILE)}>
+                <User className="mr-2 h-4 w-4" /> Hồ sơ
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate(STAFF_ROUTES.NOTIFICATIONS)}>
+                <Bell className="mr-2 h-4 w-4" /> Thông báo
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => {}}>
+                <Settings className="mr-2 h-4 w-4" /> Cài đặt
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  useAuthStore.getState().logout();
+                  window.location.href = AUTH_ROUTES.LOGIN;
+                }}
+              >
+                <LogOut className="mr-2 h-4 w-4" /> Đăng xuất
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
     </div>

@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 import { KeyboardShortcutsDialog } from './KeyboardShortcutsDialog';
 import { StaffHeader } from './StaffHeader';
 import { StaffSidebar } from './StaffSidebar';
+import { StaffBottomNav } from './StaffBottomNav';
 
 export default function StaffLayout() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(() => {
@@ -30,13 +31,14 @@ export default function StaffLayout() {
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <StaffHeader onMenuClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
 
-        <main className="scrollbar-thin flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+        <main className="scrollbar-thin flex-1 overflow-y-auto p-4 pb-20 md:p-6 md:pb-6 lg:p-8">
           <div className="mx-auto w-full max-w-7xl">
             <Outlet />
           </div>
         </main>
       </div>
 
+      <StaffBottomNav />
       <KeyboardShortcutsDialog />
       <Toaster position="top-right" richColors />
     </div>

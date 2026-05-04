@@ -47,7 +47,12 @@ export function LoginPage() {
       // Mock API call
       await new Promise((resolve, reject) => {
         setTimeout(() => {
-          if (data.email === 'admin@evcharge.vn' && data.password === '123456') {
+          if (
+            (data.email === 'admin@evcharge.vn' ||
+              data.email === 'nva@example.com' ||
+              data.email === 'staff@evcharge.vn') &&
+            data.password === '123456'
+          ) {
             resolve(true);
           } else {
             reject(new Error('Email hoặc mật khẩu không chính xác'));
@@ -55,6 +60,7 @@ export function LoginPage() {
         }, 1000);
       });
 
+      localStorage.setItem('login_email', data.email);
       toast.success('Đăng nhập thành công');
       navigate(AUTH_ROUTES.VERIFY_2FA);
     } catch (error: any) {

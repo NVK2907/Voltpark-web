@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/components/ui/select';
+import { Input } from '@/shared/components/ui/input';
 
 import {
   BarChart,
@@ -59,26 +60,35 @@ export function AnalyticsPage() {
 
       {/* Filter Bar */}
       <div className="sticky top-14 z-30 -mx-4 flex flex-col items-start justify-between gap-4 border-b bg-background/95 px-4 py-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:flex-row sm:items-center md:-mx-8 md:px-8">
-        <div className="flex w-full items-center gap-2 overflow-x-auto pb-2 sm:w-auto sm:pb-0">
-          {['today', '7d', '30d', '3m', 'custom'].map((p) => (
-            <Button
-              key={p}
-              variant={period === p ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setPeriod(p)}
-              className="whitespace-nowrap rounded-full"
-            >
-              {p === 'today'
-                ? 'Hôm nay'
-                : p === '7d'
-                  ? '7 ngày'
-                  : p === '30d'
-                    ? '30 ngày'
-                    : p === '3m'
-                      ? '3 tháng'
-                      : 'Tùy chỉnh'}
-            </Button>
-          ))}
+        <div className="flex flex-col gap-2">
+          <div className="flex w-full items-center gap-2 overflow-x-auto pb-2 sm:w-auto sm:pb-0">
+            {['today', '7d', '30d', '3m', 'custom'].map((p) => (
+              <Button
+                key={p}
+                variant={period === p ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setPeriod(p)}
+                className="whitespace-nowrap rounded-full"
+              >
+                {p === 'today'
+                  ? 'Hôm nay'
+                  : p === '7d'
+                    ? '7 ngày'
+                    : p === '30d'
+                      ? '30 ngày'
+                      : p === '3m'
+                        ? '3 tháng'
+                        : 'Tùy chỉnh'}
+              </Button>
+            ))}
+          </div>
+          {period === 'custom' && (
+            <div className="animate-in fade-in slide-in-from-top-1 flex items-center gap-2 pt-2">
+              <Input type="date" className="h-8 w-36 text-xs" defaultValue="2024-03-01" />
+              <span className="text-muted-foreground">→</span>
+              <Input type="date" className="h-8 w-36 text-xs" defaultValue="2024-03-31" />
+            </div>
+          )}
         </div>
 
         <Select value={stationId} onValueChange={setStationId}>

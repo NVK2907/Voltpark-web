@@ -101,9 +101,10 @@ export function Header({ onMenuClick }: HeaderProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-destructive focus:text-destructive"
-              onClick={() => {
+              onSelect={(e) => {
+                e.preventDefault();
                 logout();
-                navigate(AUTH_ROUTES.LOGIN);
+                window.location.href = AUTH_ROUTES.LOGIN;
               }}
             >
               <LogOut className="mr-2 h-4 w-4" />

@@ -1,4 +1,4 @@
-import { Search, Power } from 'lucide-react';
+import { Search, Power, Plus } from 'lucide-react';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { MOCK_CHARGERS } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import { PageHeader } from '@/shared/components/common/PageHeader';
 import { StatusBadge } from '@/shared/components/common/StatusBadge';
+import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import {
   Select,
@@ -33,7 +34,15 @@ export function ChargersListPage() {
 
   return (
     <div className="animate-fade-in space-y-6">
-      <PageHeader title="Quản lý Bộ Sạc" />
+      <PageHeader
+        title="Quản lý Bộ Sạc"
+        actions={
+          <Button onClick={() => {}} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Thêm sạc mới
+          </Button>
+        }
+      />
 
       <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
         <div className="relative max-w-sm flex-1">

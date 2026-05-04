@@ -4,6 +4,7 @@ import { Toaster } from 'sonner';
 
 import { UserHeader } from './components/UserHeader';
 import { UserSidebar } from './components/UserSidebar';
+import { UserBottomNav } from './components/UserBottomNav';
 
 import { cn } from '@/lib/utils';
 
@@ -44,13 +45,14 @@ export default function UserLayout() {
       <div className="relative flex min-w-0 flex-1 flex-col overflow-hidden">
         <UserHeader onMenuClick={() => setMobileOpen(true)} />
 
-        <main className="scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950">
+        <main className="scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-800 flex-1 overflow-y-auto bg-slate-50 pb-20 dark:bg-slate-950 lg:pb-0">
           <div className="mx-auto h-full">
             <Outlet />
           </div>
         </main>
       </div>
 
+      <UserBottomNav />
       <Toaster position="bottom-right" richColors />
     </div>
   );

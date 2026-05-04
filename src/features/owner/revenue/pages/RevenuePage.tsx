@@ -5,6 +5,7 @@ import { formatCurrency } from '@/lib/utils';
 import { getOwnerParkings } from '@/lib/utils-owner';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
+import { Input } from '@/shared/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -30,22 +31,32 @@ export default function RevenuePage() {
           <h2 className="text-2xl font-bold tracking-tight">Doanh thu</h2>
           <p className="text-muted-foreground">Theo dõi dòng tiền và tỷ lệ phân chia doanh thu</p>
         </div>
-        <div className="flex gap-2">
-          <Select value={period} onValueChange={setPeriod}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Chọn thời gian" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="today">Hôm nay</SelectItem>
-              <SelectItem value="this_week">Tuần này</SelectItem>
-              <SelectItem value="this_month">Tháng này</SelectItem>
-              <SelectItem value="last_month">Tháng trước</SelectItem>
-              <SelectItem value="this_year">Năm nay</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant="outline" className="gap-2">
-            <Download className="h-4 w-4" /> Xuất báo cáo
-          </Button>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          {period === 'custom' && (
+            <div className="animate-in fade-in slide-in-from-right-1 flex items-center gap-2">
+              <Input type="date" className="h-9 w-36 text-xs" defaultValue="2024-03-01" />
+              <span className="text-muted-foreground">→</span>
+              <Input type="date" className="h-9 w-36 text-xs" defaultValue="2024-03-31" />
+            </div>
+          )}
+          <div className="flex gap-2">
+            <Select value={period} onValueChange={setPeriod}>
+              <SelectTrigger className="w-[150px]">
+                <SelectValue placeholder="Chọn thời gian" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="today">Hôm nay</SelectItem>
+                <SelectItem value="this_week">Tuần này</SelectItem>
+                <SelectItem value="this_month">Tháng này</SelectItem>
+                <SelectItem value="last_month">Tháng trước</SelectItem>
+                <SelectItem value="this_year">Năm nay</SelectItem>
+                <SelectItem value="custom">Tùy chỉnh</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" className="gap-2">
+              <Download className="h-4 w-4" /> Xuất báo cáo
+            </Button>
+          </div>
         </div>
       </div>
 
